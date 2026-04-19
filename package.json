@@ -1,0 +1,48 @@
+{
+  "name": "obs-overlay-controller",
+  "version": "1.0.0",
+  "description": "OBS Overlay Controller for Esports Broadcasting",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "concurrently \"npm run dev\" \"wait-on http://localhost:3000 && electron .\"",
+    "dev": "vite",
+    "build": "vite build",
+    "electron": "electron .",
+    "dist": "npm run build && electron-builder",
+    "dist:win": "npm run build && electron-builder --win"
+  },
+  "dependencies": {
+    "obs-websocket-js": "^5.0.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.0",
+    "framer-motion": "^10.16.0",
+    "zustand": "^4.4.7",
+    "lucide-react": "^0.294.0",
+    "clsx": "^2.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.0",
+    "concurrently": "^8.2.2",
+    "electron": "^27.1.3",
+    "electron-builder": "^24.9.1",
+    "vite": "^5.0.6",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.esports.obs-overlay-controller",
+    "productName": "OBS Overlay Controller",
+    "files": ["dist/**/*", "electron/**/*"],
+    "directories": {
+      "buildResources": "build-resources",
+      "output": "release"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build-resources/icon.ico"
+    },
+    "mac": {
+      "target": "dmg"
+    }
+  }
+}
