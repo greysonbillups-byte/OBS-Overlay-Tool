@@ -210,6 +210,7 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 20px;
+  width: 100%;
 }
 .card-title {
   font-family: var(--font-display);
@@ -282,6 +283,7 @@ select option { background: var(--bg-3); }
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width: 100%;
 }
 .team-card-header,
 .map-card-header {
@@ -308,6 +310,7 @@ select option { background: var(--bg-3); }
   display: flex;
   flex-direction: column;
   gap: 18px;
+  width: 100%;
 }
 .team-logo-wrapper {
   display: flex;
@@ -321,9 +324,9 @@ select option { background: var(--bg-3); }
   gap: 8px;
 }
 .team-logo {
-  width: 100px;
-  height: 100px;
-  min-width: 100px;
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
   border-radius: 24px;
   display: grid;
   place-items: center;
@@ -331,7 +334,7 @@ select option { background: var(--bg-3); }
   font-family: var(--font-display);
   font-size: 26px;
   font-weight: 800;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 2px dashed var(--border);
   box-shadow: 0 18px 36px rgba(0,0,0,0.18);
   background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12));
   overflow: hidden;
@@ -386,6 +389,7 @@ select option { background: var(--bg-3); }
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
 }
 .score-label {
   color: var(--text-2);
@@ -469,7 +473,19 @@ select option { background: var(--bg-3); }
   display: flex;
   flex-direction: column;
   gap: 14px;
+  width:100%;
 }
+.map-score-control .score-value {
+  font-size: 28px;
+  flex:1;
+  background: var(--bg-3);
+}
+
+.map-score-control button {
+  padding: 8px 12px;
+  flex-shrink: 0;
+}
+
 .map-card-title {
   font-size: 13px;
   font-weight: 800;
@@ -514,19 +530,21 @@ select option { background: var(--bg-3); }
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
+  width:100%
 }
 .map-score-control {
   justify-content: center;
+  width: 100%;
 }
 
-/* Score Controls*/
+/* Score Controls */
 .score-control {
   display: flex;
-  align-items: center;
-  gap: 0;
-  border: none;
-  border-radius: 0;
+  align-items: stretch;
+  border: 1px solid var(--border);
+  border-radius: 8px;
   overflow: hidden;
+  width: 100%;
 }
 .score-control button {
   background: var(--bg-3);
@@ -537,23 +555,20 @@ select option { background: var(--bg-3); }
   font-size: 18px;
   font-weight: 700;
   padding: 6px 14px;
+  flex-shrink: 0;
   transition: all 0.15s;
 }
 .score-control button:hover { background: var(--bg-4); color: var(--text-1); }
 .score-control .score-value {
-  background: var(--bg-2);
+  flex: 1;
+  background: var(--bg-3);
   color: var(--text-1);
   font-family: var(--font-display);
   font-size: 22px;
   font-weight: 700;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1;
-  padding: 4px 8px;
-  min-width: 30px;
-  max-width: 48px;
-  text-align: center;
 }
 
 /* Overlay Buttons  */
@@ -592,6 +607,57 @@ select option { background: var(--bg-3); }
 }
 .scene-item:hover { background: var(--bg-3); border-color: var(--border); }
 .scene-item.active { background: var(--accent-glow); border-color: var(--accent); color: var(--accent); }
+
+/* Toggle Switch */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.toggle-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  font-family: var(--font-display);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.toggle-sub {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-top: 2px;
+}
+.toggle {
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+  background: var(--bg-4);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+.toggle::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--text-3);
+  top: 2px;
+  left: 2px;
+  transition: transform 0.2s, background 0.2s;
+}
+.toggle.on {
+  background: var(--live-glow);
+  border-color: var(--live);
+}
+.toggle.on::after {
+  background: var(--live);
+  transform: translateX(16px);
+}
 
 /*  Notifications */
 .notif-container {

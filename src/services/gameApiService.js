@@ -82,6 +82,7 @@ export async function fetchRocketLeagueData() {
   }
 }
 
+
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function formatTime(seconds) {
   const m = Math.floor(seconds / 60)
@@ -91,6 +92,7 @@ function formatTime(seconds) {
 
 export const GAME_CONFIGS = {
   lol: {
+    builtin: true, 
     label: 'League of Legends',
     color: '#C89B3C',
     fetchFn: fetchLeagueData,
@@ -100,6 +102,7 @@ export const GAME_CONFIGS = {
     modes: ['Standard', 'ARAM']
   },
   valorant: {
+    builtin: true,
     label: 'Valorant',
     color: '#FF4655',
     fetchFn: fetchValorantData,
@@ -109,6 +112,7 @@ export const GAME_CONFIGS = {
     modes: ['Standard', 'Spike Rush', 'Deathmatch', 'Escalation', 'Swiftplay']
   },
   cs2: {
+    builtin: true,
     label: 'CS2',
     color: '#F0A500',
     fetchFn: null,
@@ -118,6 +122,7 @@ export const GAME_CONFIGS = {
     modes: ['Competitive', 'Wingman', 'Deathmatch']
   },
   rl: {
+    builtin: true,
     label: 'Rocket League',
     color: '#0072CE',
     fetchFn: fetchRocketLeagueData,

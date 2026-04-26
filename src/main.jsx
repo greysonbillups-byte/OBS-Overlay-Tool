@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client'
 import { HashRouter, Routes, Route, NavLink } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Tv2, Swords, Users, Layout, Settings, Radio } from 'lucide-react'
-
 import ConnectionPage from './pages/ConnectionPage'
 import ScoreboardPage from './pages/ScoreboardPage'
 import TeamsPage from './pages/TeamsPage'
@@ -27,6 +26,8 @@ const NAV = [
 function App() {
   const { obsConnected, match, updateMatch, scenes, currentScene, setCurrentScene } = useStore()
   const pollingRef = useRef(null)
+  const { customGames } = useStore()
+  const allGames = { ...GAME_CONFIGS, ...customGames }
 
   // ── Game API polling ─────────────────────────────────────────
   useEffect(() => {
@@ -34,9 +35,10 @@ function App() {
       clearInterval(pollingRef.current)
       pollingRef.current = null
     }
+    
+    const config = allGames[match.game]
+    if (!config) return
 
-    const config = GAME_CONFIGS[match.game]
-    if (!config?.fetchFn || !config?.interval) return
 
     const poll = async () => {
       const data = await config.fetchFn()
@@ -140,14 +142,14 @@ function App() {
             <div className="game-selector">
               <label>Game:</label>
               <select value={match.game} onChange={e => updateMatch({ game: e.target.value })}>
-                {Object.entries(GAME_CONFIGS).map(([key, g]) => (
+                {Object.entries(allGames).map(([key, g]) => (
                   <option key={key} value={key}>{g.label}</option>
                 ))}
               </select>
             </div>
-            {GAME_CONFIGS[match.game]?.setupNote && (
+            {allGames[match.game]?.setupNote && (
               <span style={{ fontSize: 11, color: 'var(--text-3)' }}>
-                {GAME_CONFIGS[match.game].setupNote}
+                {allGames[match.game].setupNote}
               </span>
             )}
           </div>

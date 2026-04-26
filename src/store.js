@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-const MAX_MAP_SLOTS = 10
+export const MAX_MAP_SLOTS = 10
 
 function createMapSlot(index) {
   return {
@@ -44,10 +44,19 @@ export const useStore = create(
     selectedSchoolB: '',
   },
 
-  updateMatch: (updates) => set(state => {
-    const newMatch = { ...state.match, ...updates }
-    // Sync map slots count when maps changes
-    if (updates.maps !== undefined) {
+updateMatch: (updates) => set(state => {
+  const newMatch = { ...state.match, ...updates }
+
+  // Reset map/mode selections when game changes
+  if (updates.game !== undefined && updates.game !== state.match.game) {
+    return {
+      match: newMatch,
+      mapSlots: state.mapSlots.map(slot => ({ ...slot, map: '', mode: '' }))
+    }
+  }
+
+  // Sync map slots count when maps changes
+  if (updates.maps !== undefined) {
       const desired = Math.min(Math.max(updates.maps, 1), MAX_MAP_SLOTS)
       const current = state.mapSlots
       let newSlots
@@ -84,18 +93,18 @@ export const useStore = create(
       [team]: { ...state.match[team], score: Math.max(0, state.match[team].score - 1) }
     }
   })),
-  resetMatch: () => set(state => ({
-    match: {
-      ...state.match,
-      teamA: { ...state.match.teamA, score: 0 },
-      teamB: { ...state.match.teamB, score: 0 },
-      status: 'pregame',
-      timer: '00:00'
-    },
-    selectedSchoolA: '',
-    selectedSchoolB: '',
-    mapSlots: Array.from({ length: state.match.maps }, (_, i) => createMapSlot(i))
-  })),
+resetMatch: () => set(state => ({
+  match: {
+    ...state.match,
+    teamA: { ...state.match.teamA, score: 0 },
+    teamB: { ...state.match.teamB, score: 0 },
+    status: 'pregame',
+    timer: '00:00',
+    selectedSchoolA: '',  // ← moved inside match
+    selectedSchoolB: '',  // ← moved inside match
+  },
+  mapSlots: Array.from({ length: state.match.maps }, (_, i) => createMapSlot(i))
+})),
 
   // ── Map Slots (persisted in store so they survive navigation) ─
   mapSlots: Array.from({ length: 3 }, (_, i) => createMapSlot(i)),
@@ -148,6 +157,25 @@ export const useStore = create(
       [name]: { ...state.overlays[name], ...updates }
     }
   })),
+
+  // ── Custom Games ─────────────────────────────────────────────
+customGames: {},
+
+addCustomGame: (key, game) => set(state => ({
+  customGames: { ...state.customGames, [key]: game }
+})),
+
+updateCustomGame: (key, updates) => set(state => ({
+  customGames: {
+    ...state.customGames,
+    [key]: { ...state.customGames[key], ...updates }
+  }
+})),
+
+deleteCustomGame: (key) => set(state => {
+  const { [key]: _, ...rest } = state.customGames
+  return { customGames: rest }
+}),
 
   // ── Notifications ────────────────────────────────────────────
   notifications: [],

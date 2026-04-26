@@ -1,23 +1,24 @@
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Plus, Minus, MapPin, Clock4, ShieldCheck, Users, School as SchoolIcon, RotateCcw, Save } from 'lucide-react'
-import { useStore } from '../store'
 import { GAME_CONFIGS } from '../services/gameApiService'
-
-const MAX_MAP_SLOTS = 10
+import { useStore, MAX_MAP_SLOTS } from '../store'
 
 export default function ScoreboardPage() {
   const navigate = useNavigate()
   const {
-    match, mapSlots, setMapSlot, schools = [],
+    match, mapSlots, setMapSlot, schools = [], customGames,
     updateMatch, updateTeamA, updateTeamB,
     incrementScore, decrementScore, resetMatch, addNotification
   } = useStore()
 
-  const activeSlot = mapSlots.find(s => s.id === match.map)
-  const activeMapDisplay = activeSlot ? `${activeSlot.id}${activeSlot.map ? ` · ${activeSlot.map}` : ''}` : 'None'
+const playedCount = mapSlots.filter(s => s.played).length
+const activeMapDisplay = playedCount < mapSlots.length
+  ? `${mapSlots[playedCount].id}${mapSlots[playedCount].map ? ` · ${mapSlots[playedCount].map}` : ''}`
+  : 'Complete'
 
-  const gameConfig = GAME_CONFIGS[match.game] || GAME_CONFIGS.generic
+const allGames = { ...GAME_CONFIGS, ...customGames }
+const gameConfig = allGames[match.game] || allGames.generic
   const maps = gameConfig.maps || []
   const modes = gameConfig.modes || []
 
@@ -104,10 +105,12 @@ export default function ScoreboardPage() {
 
             <div className="score-section">
               <div className="score-label">Score</div>
-              <div className="score-control">
+              <div style={{ maxwidth: 200 }}>
+              <div className="score-control" style={{ maxWidth: 200 }}>
                 <button type="button" onClick={() => decrementScore('teamA')}><Minus size={16} /></button>
                 <span className="score-value">{match.teamA.score}</span>
                 <button type="button" onClick={() => incrementScore('teamA')}><Plus size={16} /></button>
+              </div>
               </div>
             </div>
           </div>
@@ -206,15 +209,18 @@ export default function ScoreboardPage() {
 
             <div className="score-section">
               <div className="score-label">Score</div>
-              <div className="score-control">
-                <button type="button" onClick={() => decrementScore('teamB')}><Minus size={16} /></button>
-                <span className="score-value">{match.teamB.score}</span>
-                <button type="button" onClick={() => incrementScore('teamB')}><Plus size={16} /></button>
+              <div style={{ maxwidth: 200 }}>
+              <div className="score-control" style={{ maxWidth: 200 }}>
+                <button type="button" onClick={() => decrementScore('teamA')}><Minus size={16} /></button>
+                <span className="score-value">{match.teamA.score}</span>
+                <button type="button" onClick={() => incrementScore('teamA')}><Plus size={16} /></button>
+              </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
 
       {/* Map Grid */}
       <div className="map-grid">
