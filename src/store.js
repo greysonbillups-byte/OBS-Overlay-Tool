@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 const MAX_MAP_SLOTS = 10
 
@@ -13,7 +14,9 @@ function createMapSlot(index) {
   }
 }
 
-export const useStore = create((set, get) => ({
+export const useStore = create(
+  persist(
+    (set, get) => ({
   // ── OBS Connection ───────────────────────────────────────────
   obsConnected: false,
   obsConfig: { host: 'localhost', port: '4455', password: '' },
@@ -36,7 +39,9 @@ export const useStore = create((set, get) => ({
     map: '',
     maps: 3,
     status: 'live',
-    timer: '00:00'
+    timer: '00:00',
+    selectedSchoolA: '',
+    selectedSchoolB: '',
   },
 
   updateMatch: (updates) => set(state => {
@@ -87,6 +92,8 @@ export const useStore = create((set, get) => ({
       status: 'pregame',
       timer: '00:00'
     },
+    selectedSchoolA: '',
+    selectedSchoolB: '',
     mapSlots: Array.from({ length: state.match.maps }, (_, i) => createMapSlot(i))
   })),
 
@@ -100,11 +107,11 @@ export const useStore = create((set, get) => ({
   // ── Players ──────────────────────────────────────────────────
   players: {
     teamA: Array(5).fill(null).map((_, i) => ({
-      id: `a${i}`, name: `Player ${i + 1}`, role: '', handle: '',
+      id: `a${i}`, name: `Player ${i + 1}`, role: '', handle: '', photo: '',
       stats: { kills: 0, deaths: 0, assists: 0 }, visible: false
     })),
     teamB: Array(5).fill(null).map((_, i) => ({
-      id: `b${i}`, name: `Player ${i + 1}`, role: '', handle: '',
+      id: `b${i}`, name: `Player ${i + 1}`, role: '', handle: '', photo: '',
       stats: { kills: 0, deaths: 0, assists: 0 }, visible: false
     }))
   },
@@ -115,6 +122,10 @@ export const useStore = create((set, get) => ({
       [team]: state.players[team].map((p, i) => i === index ? { ...p, ...updates } : p)
     }
   })),
+
+  // ── Schools & Collegiate Teams ───────────────────────────────
+  schools: [],
+  setSchools: (schools) => set({ schools }),
 
   // ── Overlays ─────────────────────────────────────────────────
   overlays: {
@@ -147,4 +158,7 @@ export const useStore = create((set, get) => ({
       set(state => ({ notifications: state.notifications.filter(n => n.id !== id) }))
     }, 3500)
   }
-}))
+    }),
+    { name: 'obs-overlay-storage' }
+  )
+)

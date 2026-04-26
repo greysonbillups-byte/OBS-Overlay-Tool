@@ -95,34 +95,44 @@ export const GAME_CONFIGS = {
     color: '#C89B3C',
     fetchFn: fetchLeagueData,
     interval: 5000,
-    setupNote: 'Requires a game to be running. Uses Riot Live Client API on port 2999.'
+    setupNote: 'Requires a game to be running. Uses Riot Live Client API on port 2999.',
+    maps: ['Summoner\'s Rift', 'Howling Abyss'],
+    modes: ['Standard', 'ARAM']
   },
   valorant: {
     label: 'Valorant',
     color: '#FF4655',
     fetchFn: fetchValorantData,
     interval: 5000,
-    setupNote: 'Requires Valorant running. Reads from Riot lockfile for auth.'
+    setupNote: 'Requires Valorant running. Reads from Riot lockfile for auth.',
+    maps: ['Ascent', 'Bind', 'Haven', 'Icebox', 'Lotus', 'Split', 'Sunset', 'Breeze', 'Fracture', 'Pearl'],
+    modes: ['Standard', 'Spike Rush', 'Deathmatch', 'Escalation', 'Swiftplay']
   },
   cs2: {
     label: 'CS2',
     color: '#F0A500',
     fetchFn: null,
     interval: null,
-    setupNote: 'Requires Game State Integration config in CS2 cfg folder. See docs.'
+    setupNote: 'Requires Game State Integration config in CS2 cfg folder. See docs.',
+    maps: ['Ancient', 'Anubis', 'Inferno', 'Mirage', 'Nuke', 'Overpass', 'Vertigo', 'Dust II'],
+    modes: ['Competitive', 'Wingman', 'Deathmatch']
   },
   rl: {
     label: 'Rocket League',
     color: '#0072CE',
     fetchFn: fetchRocketLeagueData,
     interval: 3000,
-    setupNote: 'Requires BakkesMod with WebSocket plugin on port 49322.'
+    setupNote: 'Requires BakkesMod with WebSocket plugin on port 49322.',
+    maps: ['DFH Stadium', 'Mannfield', 'Champions Field', 'Urban Central', 'Beckwith Park', 'Utopia Coliseum'],
+    modes: ['1v1', '2v2', '3v3', 'Rumble', 'Hoops', 'Snow Day']
   },
   generic: {
     label: 'Generic / Manual',
     color: '#6366f1',
     fetchFn: null,
     interval: null,
-    setupNote: 'Manual input only.'
+    setupNote: 'Manual input only.',
+    maps: ['Map 1', 'Map 2', 'Map 3', 'Map 4', 'Map 5'],
+    modes: ['Standard', 'Other']
   }
 }
